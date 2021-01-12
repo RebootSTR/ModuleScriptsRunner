@@ -3,6 +3,7 @@
 from Utils.MyVKLib import vk
 import time
 
+MODULE_CUSTOM_NAME = "История смены названия беседы"
 
 def run():
     while True:

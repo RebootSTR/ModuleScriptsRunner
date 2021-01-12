@@ -2,6 +2,7 @@
 
 from Utils.MyVKLib import vk
 
+MODULE_CUSTOM_NAME = "Восстановление локально удаленных сообщений"
 
 def getMessageId():
     r = vk.Rest.post("messages.getConversations", offset=0, count=1, filter="all", v="5.122").json()

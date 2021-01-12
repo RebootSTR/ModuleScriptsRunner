@@ -2,6 +2,7 @@
 
 from Utils.MyVKLib import vk
 
+MODULE_CUSTOM_NAME = "Вывод списка бесед с их ID"
 
 def run():
     dialogs = []

@@ -34,7 +34,12 @@ if __name__ == '__main__':
 
     print("Select need module to run():")
     for moduleNum in range(len(modules)):
-        print(f"  {moduleNum + 1}. {modules[moduleNum]['name']}")
+        moduleName = modules[moduleNum]['name']
+        try:
+            moduleName = modules[moduleNum]["module"].MODULE_CUSTOM_NAME
+        except:
+            pass
+        print(f"  {moduleNum + 1}. {moduleName}")
     print("\n  0. Debug On/Off \n  ---------------")
 
     while True:

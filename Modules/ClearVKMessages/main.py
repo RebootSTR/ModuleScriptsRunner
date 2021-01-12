@@ -4,6 +4,7 @@ import random
 import time
 from Utils.MyVKLib import vk
 
+MODULE_CUSTOM_NAME = "Очистка Сообщений в беседе"
 
 def run():
     while True:
