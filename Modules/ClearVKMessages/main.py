@@ -1,20 +1,23 @@
+# @rebootstr
+
 import random
 import time
 from Utils.MyVKLib import vk
 
 
 def run():
-    id = 100
-    tmp = input("peer id: ")
-    if tmp != "":
-        id = int(tmp)
     while True:
-        MY_ID = 189104642
+        tmp = input("Peer id (example: 20): ")
+        if tmp != "":
+            id = int(tmp)
+            break
+    MY_ID = vk.Rest.post("account.getProfileInfo").json()["response"]["id"]
+    while True:
         exit = False
         # ожидание команды
         while True:
             print("zapros")
-            r = vk.post("messages.getHistory", count=5, peer_id=2000000000 + id)
+            r = vk.Rest.post("messages.getHistory", count=5, peer_id=2000000000 + id)
             for item in r.json()["response"]["items"]:
                 if item["text"] == "/delete" and item["from_id"] == MY_ID:
                     if len(item['fwd_messages']) > 0:
@@ -28,15 +31,16 @@ def run():
             time.sleep(5)
         # поиск админов
         admins = []
-        r = vk.post("messages.getConversationMembers", peer_id=2000000000 + id)
+        r = vk.Rest.post("messages.getConversationMembers", peer_id=2000000000 + id)
         for item in r.json()['response']['items']:
             if item['member_id'] != MY_ID and "is_admin" in item.keys():
                 admins.append(item['member_id'])
 
         print(admins)
         # сбор ИД сообщений
-        r = vk.post("messages.getHistory", count=50, peer_id=2000000000 + id)
+        r = vk.Rest.post("messages.getHistory", count=50, peer_id=2000000000 + id)
         ids = []
+        date = int(time.time())-86400
         for item in r.json()['response']['items']:
             if item['date'] >= date:
                 if "action" not in item.keys():
@@ -46,14 +50,14 @@ def run():
                 break
         # Удаление
         print("deleting")
-        r = vk.post("messages.delete", message_ids=ids.__str__()[1:-1], delete_for_all=1)
+        r = vk.Rest.post("messages.delete", message_ids=ids.__str__()[1:-1], delete_for_all=1)
         print(r.text)
         # отчет об удалении
-        r = vk.post("messages.send", chat_id=id, message=f"Уничтожено {len(ids) - 1} сообщений(я) :)",
+        r = vk.Rest.post("messages.send", chat_id=id, message=f"Уничтожено {len(ids) - 1} сообщений(я) :)",
                  random_id=random.randint(10000000, 99999999))
         time.sleep(5)
         # удаление отчета
-        r = vk.post("messages.delete", message_ids=r.json()['response'], delete_for_all=1)
+        r = vk.Rest.post("messages.delete", message_ids=r.json()['response'], delete_for_all=1)
         # break # <-- Убрать цикличность
 
 

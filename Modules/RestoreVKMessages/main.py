@@ -1,13 +1,15 @@
+# @rebootstr
+
 from Utils.MyVKLib import vk
 
 
 def getMessageId():
-    r = vk.post("messages.getConversations", offset=0, count=1, filter="all", v="5.122").json()
+    r = vk.Rest.post("messages.getConversations", offset=0, count=1, filter="all", v="5.122").json()
     return r["response"]["items"][0]["conversation"]["last_message_id"]
 
 
 def tryRestoreMessage(message_id):
-    r = vk.post("messages.restore", message_id=message_id, v="5.122").json()
+    r = vk.Rest.post("messages.restore", message_id=message_id, v="5.122").json()
     if "error" in r.keys():
         return False
     else:

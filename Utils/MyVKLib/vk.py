@@ -1,3 +1,5 @@
+# @rebootstr
+
 import requests
 import hashlib
 
@@ -12,37 +14,69 @@ httpToken = ""
 httpSecret = ""
 
 
-def post(method, **kwargs):
-    if 'v' not in kwargs.keys():
-        kwargs["v"] = "5.126"
-    if 'access_token' not in kwargs.keys():
-        kwargs["access_token"] = token
-    kwargs["lang"] = "ru"
-    kwargs["https"] = 1
+class Rest:
 
-    url = "https://api.vk.com/method/" + method + '?'
-    for key, value in kwargs.items():
-        url += f"{key}={value}&"
-    url = url[:-1]
-    try:
-        r = requests.post(url)
-    except:
-        print('ошибка ')
-        input()
-    return r
+    @staticmethod
+    def post(method, **kwargs):
+        if 'v' not in kwargs.keys():
+            kwargs["v"] = "5.126"
+        if 'access_token' not in kwargs.keys():
+            kwargs["access_token"] = token
+        kwargs["lang"] = "ru"
+        kwargs["https"] = 1
 
-
-def get(url, timeout):
-    while True:
+        url = "https://api.vk.com/method/" + method + '?'
+        for key, value in kwargs.items():
+            url += f"{key}={value}&"
+        url = url[:-1]
         try:
-            r = requests.post(url, timeout=timeout)
-            break
-        except Exception:
-            print('ошибка get запроса')
-    return r
+            r = requests.post(url)
+        except:
+            print('ошибка ')
+            input()
+        return r
+
+    @staticmethod
+    def get(url, timeout):
+        while True:
+            try:
+                r = requests.post(url, timeout=timeout)
+                break
+            except Exception:
+                print('ошибка get запроса')
+        return r
 
 
-class http:
+class LongPoll:
+
+    @staticmethod
+    def update_keys(mode=''):
+        global params
+        print("Обновляю ключи")
+        data = Rest.post("messages.getLongPollServer").json()['response']
+        data['wait'] = 85
+        params = data
+        if mode == 'update':
+            return LongPoll.get_update()
+
+    @staticmethod
+    def get_update():
+        global params
+        print("Поиск обновлений")
+        r = Rest.get(
+            "https://{server}?act=a_check&key={key}&ts={ts}&wait={wait}&mode=2version=3".format(server=params['server'],
+                                                                                                key=params['key'],
+                                                                                                wait=params['wait'],
+                                                                                                ts=params['ts']),
+            timeout=90).json()
+        if 'failed' in r.keys():
+            r = LongPoll.update_keys(mode='update')
+        params['ts'] = r['ts']
+        print("Обновлено")
+        return r
+
+
+class HttpRest:
 
     @staticmethod
     def post(method, secret=httpSecret, **kwargs):
