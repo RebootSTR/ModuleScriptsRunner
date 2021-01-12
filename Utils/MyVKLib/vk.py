@@ -1,7 +1,13 @@
 import requests
 import hashlib
 
-token = ""
+try:
+    from Utils.MyVKLib.settings import token
+except:
+    # Enter your token HERE
+    token = ""
+
+
 httpToken = ""
 httpSecret = ""
 
