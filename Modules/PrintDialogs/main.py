@@ -4,6 +4,7 @@ from Utils.MyVKLib import vk
 
 MODULE_CUSTOM_NAME = "Вывод списка бесед с их ID"
 
+
 def run():
     dialogs = []
 
@@ -20,5 +21,5 @@ def run():
         })
 
     for dialog in dialogs:
-        print(f"{dialog['id']} - {dialog['name']}")
+        print(f"{dialog['id']:3} - {dialog['name']}")
     print()
