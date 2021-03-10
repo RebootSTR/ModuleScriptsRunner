@@ -69,7 +69,7 @@ if __name__ == '__main__':
             pass
 
         print(f"  {moduleNum + 1:2}. {moduleName}({moduleOrder})")
-    print("\n  0. Debug On/Off \n  ---------------")
+    print("\n   0. Debug On/Off \n  ---------------")
 
     while True:
         try:
