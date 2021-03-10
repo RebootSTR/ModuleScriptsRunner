@@ -26,20 +26,49 @@ def checkModules():
     return True
 
 
+def sortingModules():
+    for module in modules:
+        try:
+            order = int(module["module"].ORDER)
+        except:
+            module["module"].ORDER = 0
+    for i in range(0, len(modules)-1):
+        for j in range(i, len(modules)):
+            if modules[j]["module"].ORDER == 0:
+                continue
+            if modules[i]["module"].ORDER > modules[j]["module"].ORDER or modules[i]["module"].ORDER == 0:
+                tmp = modules[j]
+                modules[j] = modules[i]
+                modules[i] = tmp
+
+
 if __name__ == '__main__':
     debug = False
     modules = []
     if not checkModules():
         print("Modules not found. Put the modules in directory named \"Modules\". Closing..")
 
+    sortingModules()
+
     print("Select need module to run():")
     for moduleNum in range(len(modules)):
+        # Hiding checking
+        try:
+            if str(modules[moduleNum]["module"].HIDE) == "True":
+                continue
+        except:
+            pass
+
         moduleName = modules[moduleNum]['name']
+        moduleOrder = modules[moduleNum]["module"].ORDER
+
+        # Custom name checking
         try:
             moduleName = modules[moduleNum]["module"].MODULE_CUSTOM_NAME
         except:
             pass
-        print(f"  {moduleNum + 1}. {moduleName}")
+
+        print(f"  {moduleNum + 1:2}. {moduleName}({moduleOrder})")
     print("\n  0. Debug On/Off \n  ---------------")
 
     while True:

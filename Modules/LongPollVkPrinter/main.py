@@ -4,6 +4,7 @@ import time
 from Utils.MyVKLib import vk
 
 MODULE_CUSTOM_NAME = "Отлов сообщений в LongPoll"
+ORDER = 2
 
 def run():
     global params

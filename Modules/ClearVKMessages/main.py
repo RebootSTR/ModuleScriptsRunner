@@ -5,6 +5,7 @@ import time
 from Utils.MyVKLib import vk
 
 MODULE_CUSTOM_NAME = "Очистка Сообщений в беседе"
+ORDER = 2
 
 def run():
     while True:
